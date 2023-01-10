@@ -1,9 +1,11 @@
 // const controller = require('./controllers/controller');
 const { healthCheck } = require('./controllers/healthCheck');
+const userController = require('./controllers/users');
+const { userSchema } = require('./schemas/users');
+const { validateBySchema } = require('./middlewares/validateBySchema');
+const { existEmailDB } = require('./middlewares/users');
 
 exports.init = app => {
   app.get('/health', healthCheck);
-  // app.get('/endpoint/get/path', [], controller.methodGET);
-  // app.put('/endpoint/put/path', [], controller.methodPUT);
-  // app.post('/endpoint/post/path', [], controller.methodPOST);
+  app.post('/users', [validateBySchema(userSchema), existEmailDB], userController.createUser);
 };
